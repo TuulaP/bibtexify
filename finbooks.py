@@ -20,7 +20,7 @@ recordurl = "https://api.finna.fi/v1/record?id="
 suffix = "&field[]=id"
 FLTR = "&filter[]=~"
 booktype = '&filter[]=~format_ext_str_mv="1/Book/Book/"'
-corefields="&field[]=publishers&field[]=publicationDates&field[]=publicationInfo&field[]=nonPresenterAuthors&field[]=title"
+corefields = "&field[]=publishers&field[]=publicationDates&field[]=publicationInfo&field[]=nonPresenterAuthors&field[]=title"
 
 builcodes = {
     'helmet': 'building:"0/Helmet/"',
@@ -35,38 +35,39 @@ marcfields = {
 }
 
 
-
-
-
 def seekBookbyISBN(isbn, library="helmet"):
 
     library = builcodes[library]
 
     ##print("XXX", url+isbn+full+FLTR+library)
 
-    result = urllib.request.urlopen(url+isbn+corefields).read() #+full+FLTR+library).read()
+    # +full+FLTR+library).read()
+    result = urllib.request.urlopen(url+isbn+corefields).read()
     result = json.loads(result)
 
-    if result.get('records') is not None: #or len(result.get('records'))>0:
+    if result.get('records') is not None:  # or len(result.get('records'))>0:
         result = result.get('records')[0]
     else:
         return None
 
     #print("data searched:" + url + isbn + "\n")
     #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(result)
+    # pp.pprint(result)
 
     title = result['title']
-    
-    authors = result['nonPresenterAuthors']
-    auths= []
-    for auth in authors:
-        if auth['role']=='kirjoittaja':
-            auths.append(auth['name'])
 
-    author = ", ".join(auths) # last first,_ as string
+    authors = result['nonPresenterAuthors']
+    auths = []
+    print(authors)
+    for auth in authors:
+        if 'role' in auth and auth['role'] == 'kirjoittaja':
+            auths.append(auth['name'])
+        if 'name' in authors[0]:
+            auths.append(authors[0]['name'])
+
+    author = ", ".join(auths)  # last first,_ as string
     publisher = ", ".join(result['publishers'])
-    pubyear = result['publicationDates'][0] 
+    pubyear = result['publicationDates'][0]
 
     #print("Valittu ISBN: {0}, title {1}".format(isbn, title.encode('utf-8')))
 
