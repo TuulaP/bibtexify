@@ -46,11 +46,15 @@ def seekBookbyISBN(isbn, library="helmet"):
 
     result = urllib.request.urlopen(url+isbn+corefields).read() #+full+FLTR+library).read()
     result = json.loads(result)
-    result = result.get('records')[0]
+
+    if result.get('records') is not None: #or len(result.get('records'))>0:
+        result = result.get('records')[0]
+    else:
+        return None
 
     #print("data searched:" + url + isbn + "\n")
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(result)
+    #pp = pprint.PrettyPrinter(indent=4)
+    #pp.pprint(result)
 
     title = result['title']
     
