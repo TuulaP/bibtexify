@@ -58,12 +58,14 @@ def seekBookbyISBN(isbn, library="helmet"):
 
     authors = result['nonPresenterAuthors']
     auths = []
-    print(authors)
+    # print(authors)
     for auth in authors:
         if 'role' in auth and auth['role'] == 'kirjoittaja':
             auths.append(auth['name'])
-        if 'name' in authors[0]:
-            auths.append(authors[0]['name'])
+
+    # planb for getting author as last resort.
+    if len(auths) == 0 and 'name' in authors[0]:
+        auths.append(authors[0]['name'])
 
     author = ", ".join(auths)  # last first,_ as string
     publisher = ", ".join(result['publishers'])
