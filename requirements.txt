@@ -6,7 +6,7 @@ simplejson==3.16.0
 urllib3==1.24.2
 click==7.1.2
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 Werkzeug==1.0.1
 WTForms==2.3.1
